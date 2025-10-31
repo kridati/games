@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Flying Game - Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            font-family: 'Arial', sans-serif;
+            touch-action: none;
+        }
+
+        #gameCanvas {
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 70%, #90EE90 100%);
+            border: 3px solid #333;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            max-width: 100vw;
+            max-height: 100vh;
+        }
+
+        #scoreBoard {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #startScreen, #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 20;
+            color: white;
+            text-align: center;
+        }
+
+        #startScreen h1, #gameOverScreen h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+        }
+
+        #startScreen p, #gameOverScreen p {
+            font-size: 24px;
+            margin: 10px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 15px 40px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(to bottom, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        #gameOverScreen {
+            display: none;
+        }
+
+        #finalScore {
+            font-size: 36px;
+            margin: 20px 0;
+            color: #FFD700;
+        }
+
+        #muteButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            z-index: 15;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="scoreBoard">0</div>
+    <button id="muteButton" onclick="toggleMute()">🔊</button>
+    
+    <div id="startScreen">
+        <h1>🚁 Flying Game</h1>
+        <p>Tap anywhere to fly!</p>
+        <p>Avoid the obstacles</p>
+        <button class="btn" onclick="startGame()">START GAME</button>
+    </div>
+
+    <div id="gameOverScreen">
+        <h1>Game Over!</h1>
+        <div id="finalScore">Score: 0</div>
+        <button class="btn" onclick="restartGame()">PLAY AGAIN</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreBoard = document.getElementById('scoreBoard');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const finalScore = document.getElementById('finalScore');
+        const muteButton = document.getElementById('muteButton');
+
+        // Audio Context for sound effects
+        let audioContext;
+        let isMuted = false;
+        let backgroundMusicGain;
+        let backgroundMusicSource;
+
+        // Initialize Audio Context
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Create background music using Web Audio API
+        function playBackgroundMusic() {
+            if (!audioContext || isMuted) return;
+            
+            // Stop existing music if playing
+            if (backgroundMusicSource) {
+                backgroundMusicSource.stop();
+            }
+
+            const oscillator1 = audioContext.createOscillator();
+            const oscillator2 = audioContext.createOscillator();
+            backgroundMusicGain = audioContext.createGain();
+
+            // Create a simple melody
+            oscillator1.type = 'sine';
+            oscillator2.type = 'sine';
+            
+            oscillator1.frequency.setValueAtTime(262, audioContext.currentTime); // C4
+            oscillator2.frequency.setValueAtTime(330, audioContext.currentTime); // E4
+
+            backgroundMusicGain.gain.setValueAtTime(0.05, audioContext.currentTime);
+
+            oscillator1.connect(backgroundMusicGain);
+            oscillator2.connect(backgroundMusicGain);
+            backgroundMusicGain.connect(audioContext.destination);
+
+            oscillator1.start();
+            oscillator2.start();
+
+            // Create a simple repeating melody pattern
+            const melody = [262, 294, 330, 349, 392, 349, 330, 294];
+            let noteIndex = 0;
+            const noteInterval = setInterval(() => {
+                if (!gameRunning) {
+                    clearInterval(noteInterval);
+                    return;
+                }
+                oscillator1.frequency.setValueAtTime(melody[noteIndex], audioContext.currentTime);
+                oscillator2.frequency.setValueAtTime(melody[noteIndex] * 1.25, audioContext.currentTime);
+                noteIndex = (noteIndex + 1) % melody.length;
+            }, 400);
+
+            backgroundMusicSource = {
+                stop: () => {
+                    clearInterval(noteInterval);
+                    oscillator1.stop();
+                    oscillator2.stop();
+                }
+            };
+        }
+
+        // Jump sound effect
+        function playJumpSound() {
+            if (!audioContext || isMuted) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        // Score sound effect
+        function playScoreSound() {
+            if (!audioContext || isMuted) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.05);
+
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+
+        // Game over sound effect
+        function playGameOverSound() {
+            if (!audioContext || isMuted) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.5);
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // Toggle mute
+        function toggleMute() {
+            isMuted = !isMuted;
+            muteButton.textContent = isMuted ? '🔇' : '🔊';
+            
+            if (isMuted && backgroundMusicSource) {
+                backgroundMusicSource.stop();
+            } else if (!isMuted && gameRunning) {
+                playBackgroundMusic();
+            }
+        }
+
+        // Set canvas size for mobile
+        function resizeCanvas() {
+            const aspectRatio = 9 / 16;
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            
+            if (width / height > aspectRatio) {
+                width = height * aspectRatio;
+            } else {
+                height = width / aspectRatio;
+            }
+            
+            canvas.width = Math.min(width, 400);
+            canvas.height = Math.min(height, 700);
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Game variables
+        let gameRunning = false;
+        let score = 0;
+        let frame = 0;
+        
+        // Player object
+        const player = {
+            x: 80,
+            y: canvas.height / 2,
+            width: 50,
+            height: 50,
+            velocity: 0,
+            gravity: 0.5,
+            jump: -10,
+            rotation: 0
+        };
+
+        // Obstacles array
+        let obstacles = [];
+        const obstacleWidth = 60;
+        const gap = 180;
+        const obstacleSpeed = 3;
+
+        // Cloud array for background
+        let clouds = [];
+        
+        // Initialize clouds
+        function initClouds() {
+            clouds = [];
+            for (let i = 0; i < 5; i++) {
+                clouds.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height * 0.6,
+                    width: 60 + Math.random() * 40,
+                    height: 30 + Math.random() * 20,
+                    speed: 0.5 + Math.random() * 0.5
+                });
+            }
+        }
+
+        // Draw player (character)
+        function drawPlayer() {
+            ctx.save();
+            ctx.translate(player.x + player.width / 2, player.y + player.height / 2);
+            ctx.rotate(player.rotation);
+            
+            // Body
+            ctx.fillStyle = '#FF9800';
+            ctx.fillRect(-player.width/2, -player.height/2, player.width, player.height);
+            
+            // Face
+            ctx.fillStyle = '#FFE0B2';
+            ctx.fillRect(-player.width/2 + 10, -player.height/2 + 10, 30, 30);
+            
+            // Eyes
+            ctx.fillStyle = '#000';
+            ctx.fillRect(-player.width/2 + 15, -player.height/2 + 15, 5, 5);
+            ctx.fillRect(-player.width/2 + 25, -player.height/2 + 15, 5, 5);
+            
+            // Smile
+            ctx.beginPath();
+            ctx.arc(0, -5, 8, 0, Math.PI);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Propeller (animated)
+            ctx.fillStyle = '#2196F3';
+            const propellerOffset = Math.sin(frame * 0.5) * 3;
+            ctx.fillRect(-player.width/2 - 5, -player.height/2 - 15 + propellerOffset, 50, 8);
+            
+            ctx.restore();
+        }
+
+        // Draw clouds
+        function drawClouds() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            clouds.forEach(cloud => {
+                ctx.beginPath();
+                ctx.arc(cloud.x, cloud.y, cloud.width/3, 0, Math.PI * 2);
+                ctx.arc(cloud.x + cloud.width/3, cloud.y - cloud.height/3, cloud.width/4, 0, Math.PI * 2);
+                ctx.arc(cloud.x + cloud.width/2, cloud.y, cloud.width/3.5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        // Update clouds
+        function updateClouds() {
+            clouds.forEach(cloud => {
+                cloud.x -= cloud.speed;
+                if (cloud.x + cloud.width < 0) {
+                    cloud.x = canvas.width;
+                    cloud.y = Math.random() * canvas.height * 0.6;
+                }
+            });
+        }
+
+        // Create obstacle
+        function createObstacle() {
+            const minHeight = 50;
+            const maxHeight = canvas.height - gap - minHeight;
+            const height = minHeight + Math.random() * (maxHeight - minHeight);
+            
+            obstacles.push({
+                x: canvas.width,
+                topHeight: height,
+                bottomY: height + gap,
+                scored: false
+            });
+        }
+
+        // Draw obstacles
+        function drawObstacles() {
+            ctx.fillStyle = '#4CAF50';
+            ctx.strokeStyle = '#2E7D32';
+            ctx.lineWidth = 3;
+            
+            obstacles.forEach(obstacle => {
+                // Top obstacle
+                ctx.fillRect(obstacle.x, 0, obstacleWidth, obstacle.topHeight);
+                ctx.strokeRect(obstacle.x, 0, obstacleWidth, obstacle.topHeight);
+                
+                // Bottom obstacle
+                const bottomHeight = canvas.height - obstacle.bottomY;
+                ctx.fillRect(obstacle.x, obstacle.bottomY, obstacleWidth, bottomHeight);
+                ctx.strokeRect(obstacle.x, obstacle.bottomY, obstacleWidth, bottomHeight);
+                
+                // Decorative caps
+                ctx.fillStyle = '#66BB6A';
+                ctx.fillRect(obstacle.x - 5, obstacle.topHeight - 20, obstacleWidth + 10, 20);
+                ctx.fillRect(obstacle.x - 5, obstacle.bottomY, obstacleWidth + 10, 20);
+                ctx.fillStyle = '#4CAF50';
+            });
+        }
+
+        // Update obstacles
+        function updateObstacles() {
+            obstacles.forEach((obstacle, index) => {
+                obstacle.x -= obstacleSpeed;
+                
+                // Remove off-screen obstacles
+                if (obstacle.x + obstacleWidth < 0) {
+                    obstacles.splice(index, 1);
+                }
+                
+                // Score point
+                if (!obstacle.scored && obstacle.x + obstacleWidth < player.x) {
+                    obstacle.scored = true;
+                    score++;
+                    scoreBoard.textContent = score;
+                    playScoreSound();
+                }
+                
+                // Check collision
+                if (
+                    player.x + player.width > obstacle.x &&
+                    player.x < obstacle.x + obstacleWidth &&
+                    (player.y < obstacle.topHeight || player.y + player.height > obstacle.bottomY)
+                ) {
+                    endGame();
+                }
+            });
+        }
+
+        // Update player
+        function updatePlayer() {
+            player.velocity += player.gravity;
+            player.y += player.velocity;
+            
+            // Rotation based on velocity
+            player.rotation = Math.min(Math.max(player.velocity * 0.05, -0.5), 0.5);
+            
+            // Check boundaries
+            if (player.y + player.height > canvas.height || player.y < 0) {
+                endGame();
+            }
+        }
+
+        // Draw ground
+        function drawGround() {
+            const groundHeight = 30;
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, canvas.height - groundHeight, canvas.width, groundHeight);
+            
+            // Grass pattern
+            ctx.fillStyle = '#228B22';
+            for (let i = 0; i < canvas.width; i += 20) {
+                ctx.fillRect(i, canvas.height - groundHeight, 10, 5);
+            }
+        }
+
+        // Game loop
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            frame++;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background elements
+            drawClouds();
+            updateClouds();
+            
+            // Update game objects
+            updatePlayer();
+            updateObstacles();
+            
+            // Draw game objects
+            drawObstacles();
+            drawPlayer();
+            drawGround();
+            
+            // Create new obstacles
+            if (frame % 100 === 0) {
+                createObstacle();
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Handle tap/click
+        function handleJump(e) {
+            e.preventDefault();
+            if (gameRunning) {
+                player.velocity = player.jump;
+                playJumpSound();
+            }
+        }
+
+        canvas.addEventListener('touchstart', handleJump);
+        canvas.addEventListener('mousedown', handleJump);
+
+        // Start game
+        function startGame() {
+            initAudio();
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            gameRunning = true;
+            score = 0;
+            frame = 0;
+            obstacles = [];
+            scoreBoard.textContent = '0';
+            
+            // Reset player
+            player.y = canvas.height / 2;
+            player.velocity = 0;
+            player.rotation = 0;
+            
+            // Initialize clouds
+            initClouds();
+            
+            // Start background music
+            playBackgroundMusic();
+            
+            gameLoop();
+        }
+
+        // End game
+        function endGame() {
+            gameRunning = false;
+            gameOverScreen.style.display = 'flex';
+            finalScore.textContent = `Score: ${score}`;
+            playGameOverSound();
+            
+            if (backgroundMusicSource) {
+                backgroundMusicSource.stop();
+            }
+        }
+
+        // Restart game
+        function restartGame() {
+            startGame();
+        }
+
+        // Initialize
+        initClouds();
+    </script>
+</body>
+</html>
