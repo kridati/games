@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameSphere - Play Free Online Games</title>
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
+
     <!-- Google Font: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
         /* Apply the Inter font */
         body {
@@ -26,17 +27,21 @@
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
+
         .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
         }
-        
+
         /* Carousel transition */
         .carousel-slide {
             transition: opacity 1s ease-in-out;
         }
     </style>
 </head>
+
 <body class="bg-gray-900 text-gray-100">
 
     <!-- Header -->
@@ -48,19 +53,15 @@
                     <i data-lucide="gamepad-2" class="text-orange-500 h-8 w-8"></i>
                     <span class="text-2xl font-bold text-white">Kridati</span>
                 </div>
-                
+
                 <!-- Search Bar (Desktop) -->
                 <div class="hidden md:flex flex-1 justify-center px-8">
                     <div class="relative w-full max-w-lg">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i data-lucide="search" class="h-5 w-5 text-gray-400"></i>
                         </div>
-                        <input 
-                            type="text" 
-                            id="desktop-search-input"
-                            placeholder="Search Games..." 
-                            class="block w-full bg-gray-800 border border-gray-700 rounded-full py-2 pl-10 pr-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                        >
+                        <input type="text" id="desktop-search-input" placeholder="Search Games..."
+                            class="block w-full bg-gray-800 border border-gray-700 rounded-full py-2 pl-10 pr-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
                     </div>
                 </div>
 
@@ -68,23 +69,32 @@
                 <div class="flex items-center gap-3">
                     <!-- Categories (Desktop) -->
                     <div class="relative hidden md:block"> <!-- Added relative wrapper -->
-                        <button id="categories-btn" class="flex items-center gap-1.5 text-gray-300 hover:text-white transition-colors rounded-full p-2"> <!-- Added ID -->
+                        <button id="categories-btn"
+                            class="flex items-center gap-1.5 text-gray-300 hover:text-white transition-colors rounded-full p-2">
+                            <!-- Added ID -->
                             <i data-lucide="layout-grid" class="h-5 w-5"></i>
                             <span class="text-sm font-medium">Categories</span>
                         </button>
-                        
+
                         <!-- Categories Dropdown (NEW) -->
-                        <div id="categories-dropdown" class="hidden absolute top-12 right-0 z-50 w-48 bg-gray-800 rounded-lg shadow-lg py-2 border border-gray-700">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Action</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Adventure</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Puzzle</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Racing</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Strategy</a>
+                        <div id="categories-dropdown"
+                            class="hidden absolute top-12 right-0 z-50 w-48 bg-gray-800 rounded-lg shadow-lg py-2 border border-gray-700">
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Action</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Adventure</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Puzzle</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Racing</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Strategy</a>
                         </div>
                     </div>
-                    
+
                     <!-- Search (Mobile) -->
-                    <button id="mobile-search-button" class="md:hidden text-gray-300 hover:text-white transition-colors rounded-full p-2">
+                    <button id="mobile-search-button"
+                        class="md:hidden text-gray-300 hover:text-white transition-colors rounded-full p-2">
                         <i data-lucide="search" class="h-6 w-6"></i>
                     </button>
 
@@ -92,34 +102,44 @@
                     <button class="text-gray-300 hover:text-white transition-colors rounded-full p-2">
                         <i data-lucide="user-circle" class="h-6 w-6"></i>
                     </button>
-                    
+
                     <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white transition-colors rounded-full p-2">
+                    <button id="mobile-menu-btn"
+                        class="md:hidden text-gray-300 hover:text-white transition-colors rounded-full p-2">
                         <i data-lucide="menu" class="h-6 w-6"></i>
                     </button>
                 </div>
             </div>
         </div>
-        
+
         <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="md:hidden hidden absolute top-16 left-0 w-full bg-gray-900 shadow-lg py-4">
             <!-- Modified Categories link -->
-            <button id="mobile-categories-toggle" class="w-full flex justify-between items-center px-4 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">
+            <button id="mobile-categories-toggle"
+                class="w-full flex justify-between items-center px-4 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">
                 <span>Categories</span>
                 <i data-lucide="chevron-down" class="h-5 w-5 transition-transform duration-200"></i>
             </button>
             <!-- New Mobile Categories Submenu -->
             <div id="mobile-categories-submenu" class="hidden pl-8">
-                <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Action</a>
-                <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Adventure</a>
-                <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Puzzle</a>
-                <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Racing</a>
-                <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Strategy</a>
+                <a href="#"
+                    class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Action</a>
+                <a href="#"
+                    class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Adventure</a>
+                <a href="#"
+                    class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Puzzle</a>
+                <a href="#"
+                    class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Racing</a>
+                <a href="#"
+                    class="block px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">Strategy</a>
             </div>
-            
-            <a href="#" class="block px-4 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">New Games</a>
-            <a href="#" class="block px-4 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Popular</a>
-            
+
+            <a href="#"
+                class="block px-4 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">New
+                Games</a>
+            <a href="#"
+                class="block px-4 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Popular</a>
+
             <!-- Removed redundant category links -->
             <!-- <a href="#" class="block px-4 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Action</a> -->
             <!-- <a href="#" class="block px-4 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Puzzle</a> -->
@@ -133,14 +153,11 @@
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <i data-lucide="search" class="h-5 w-5 text-gray-400"></i>
                 </div>
-                <input 
-                    type="text" 
-                    id="mobile-search-input"
-                    placeholder="Search Games..." 
-                    class="block w-full bg-gray-800 border border-gray-700 rounded-full py-3 pl-10 pr-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                >
+                <input type="text" id="mobile-search-input" placeholder="Search Games..."
+                    class="block w-full bg-gray-800 border border-gray-700 rounded-full py-3 pl-10 pr-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
             </div>
-            <button id="mobile-search-close" class="absolute top-1/2 -translate-y-1/2 right-3 text-gray-400 hover:text-white">
+            <button id="mobile-search-close"
+                class="absolute top-1/2 -translate-y-1/2 right-3 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="h-6 w-6"></i>
             </button>
         </div>
@@ -150,46 +167,56 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <!-- Featured Games Carousel -->
-        <section class="relative w-full h-56 sm:h-72 md:h-96 rounded-2xl overflow-hidden shadow-2xl shadow-orange-500/10">
+        <section
+            class="relative w-full h-56 sm:h-72 md:h-96 rounded-2xl overflow-hidden shadow-2xl shadow-orange-500/10">
             <!-- Slides -->
             <div id="carousel-container">
                 <!-- Slide 1 -->
                 <div class="carousel-slide absolute inset-0 w-full h-full opacity-0">
-                    <img src="https://placehold.co/1200x500/1E40AF/FFFFFF?text=Cosmic+Racers" class="w-full h-full object-cover" alt="Cosmic Racers">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 md:p-10 flex flex-col justify-end">
+                    <img src="https://placehold.co/1200x500/1E40AF/FFFFFF?text=Cosmic+Racers"
+                        class="w-full h-full object-cover" alt="Cosmic Racers">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 md:p-10 flex flex-col justify-end">
                         <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold text-white shadow-lg">Cosmic Racers</h1>
                         <p class="text-sm sm:text-lg text-gray-200 mt-2 shadow-md">Race Across the Galaxy!</p>
-                        <a href="#" class="mt-4 w-fit bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+                        <a href="#"
+                            class="mt-4 w-fit bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
                             Play Now
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Slide 2 -->
                 <div class="carousel-slide absolute inset-0 w-full h-full opacity-0">
-                    <img src="https://placehold.co/1200x500/047857/FFFFFF?text=Jungle+Gems" class="w-full h-full object-cover" alt="Jungle Gems">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 md:p-10 flex flex-col justify-end">
+                    <img src="https://placehold.co/1200x500/047857/FFFFFF?text=Jungle+Gems"
+                        class="w-full h-full object-cover" alt="Jungle Gems">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 md:p-10 flex flex-col justify-end">
                         <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold text-white shadow-lg">Jungle Gems</h1>
                         <p class="text-sm sm:text-lg text-gray-200 mt-2 shadow-md">The Ultimate Puzzle Adventure.</p>
-                        <a href="#" class="mt-4 w-fit bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+                        <a href="#"
+                            class="mt-4 w-fit bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
                             Play Now
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Slide 3 -->
                 <div class="carousel-slide absolute inset-0 w-full h-full opacity-0">
-                    <img src="https://placehold.co/1200x500/7E22CE/FFFFFF?text=Cyber+Strike" class="w-full h-full object-cover" alt="Cyber Strike">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 md:p-10 flex flex-col justify-end">
+                    <img src="https://placehold.co/1200x500/7E22CE/FFFFFF?text=Cyber+Strike"
+                        class="w-full h-full object-cover" alt="Cyber Strike">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 md:p-10 flex flex-col justify-end">
                         <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold text-white shadow-lg">Cyber Strike</h1>
                         <p class="text-sm sm:text-lg text-gray-200 mt-2 shadow-md">Defend the Neon City.</p>
-                        <a href="#" class="mt-4 w-fit bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+                        <a href="#"
+                            class="mt-4 w-fit bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
                             Play Now
                         </a>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Carousel Dots -->
             <div id="carousel-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
                 <!-- Dots will be inserted here by JS -->
@@ -199,7 +226,8 @@
         <!-- Search Results (NEW) -->
         <section id="search-results-section" class="hidden mt-12">
             <h2 class="text-2xl font-bold text-white mb-4">Search Results</h2>
-            <div id="search-results-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+            <div id="search-results-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
                 <!-- Search results will be injected here -->
             </div>
             <div id="no-results-message" class="hidden text-center text-gray-400 py-12">
@@ -217,111 +245,165 @@
                 <h2 class="text-2xl font-bold text-white mb-4">Continue Playing</h2>
                 <div class="flex gap-4 overflow-x-auto no-scrollbar pb-4 snap-x snap-mandatory">
                     <!-- Game Card Template -->
-                    <a href="fly-it.html" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/374151/FFFFFF?text=Fly+It" alt="Dungeon Quest" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="fly-it.html" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="photo_2025-11-01_11-39-07.jpg" alt="fly-it"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Fly It</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Fly It</h3>
+                        <!-- Added class -->
                     </a>
-                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/1D4ED8/FFFFFF?text=Farmville+3" alt="Farmville 3" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/1D4ED8/FFFFFF?text=Farmville+3" alt="Farmville 3"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Farmville 3</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Farmville 3
+                        </h3> <!-- Added class -->
                     </a>
-                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/BE185D/FFFFFF?text=Bubble+Pop" alt="Bubble Pop" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/BE185D/FFFFFF?text=Bubble+Pop" alt="Bubble Pop"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Bubble Pop Universe</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Bubble Pop
+                            Universe</h3> <!-- Added class -->
                     </a>
-                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/F59E0B/FFFFFF?text=Alien+Swarm" alt="Alien Swarm" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/F59E0B/FFFFFF?text=Alien+Swarm" alt="Alien Swarm"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Alien Swarm</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Alien Swarm
+                        </h3> <!-- Added class -->
                     </a>
                     <!-- Add more cards as needed -->
                 </div>
             </section>
-            
+
             <!-- "Popular Games" Section -->
             <section>
                 <h2 class="text-2xl font-bold text-white mb-4">Popular Games</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
                     <!-- Using a grid for this section for variety -->
                     <a href="#" class="game-card block group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/6D28D9/FFFFFF?text=Dragon+Slayer" alt="Dragon Slayer" class="w-full object-cover aspect-square">
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/6D28D9/FFFFFF?text=Dragon+Slayer" alt="Dragon Slayer"
+                                class="w-full object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Dragon Slayer</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Dragon
+                            Slayer</h3> <!-- Added class -->
                     </a>
                     <a href="#" class="game-card block group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/DB2777/FFFFFF?text=Knight+Fury" alt="Knight Fury" class="w-full object-cover aspect-square">
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/DB2777/FFFFFF?text=Knight+Fury" alt="Knight Fury"
+                                class="w-full object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Knight Fury</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Knight Fury
+                        </h3> <!-- Added class -->
                     </a>
                     <a href="#" class="game-card block group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/059669/FFFFFF?text=Zoopark" alt="Zoopark" class="w-full object-cover aspect-square">
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/059669/FFFFFF?text=Zoopark" alt="Zoopark"
+                                class="w-full object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Zoopark Friends</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Zoopark
+                            Friends</h3> <!-- Added class -->
                     </a>
                     <a href="#" class="game-card block group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/D97706/FFFFFF?text=Space+Invaders" alt="Space Invaders" class="w-full object-cover aspect-square">
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/D97706/FFFFFF?text=Space+Invaders"
+                                alt="Space Invaders" class="w-full object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Zombie Escape</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Zombie
+                            Escape</h3> <!-- Added class -->
                     </a>
                     <a href="#" class="game-card block group hidden sm:block"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/0284C7/FFFFFF?text=Drizzle+Mania" alt="Drizzle Mania" class="w-full object-cover aspect-square">
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/0284C7/FFFFFF?text=Drizzle+Mania" alt="Drizzle Mania"
+                                class="w-full object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Drizzle Mania</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Drizzle
+                            Mania</h3> <!-- Added class -->
                     </a>
                     <a href="#" class="game-card block group hidden lg:block"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/64748B/FFFFFF?text=Pixel+Ploeners" alt="Pixel Ploeners" class="w-full object-cover aspect-square">
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/64748B/FFFFFF?text=Pixel+Ploeners"
+                                alt="Pixel Ploeners" class="w-full object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Pixel Ploeners</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Pixel
+                            Ploeners</h3> <!-- Added class -->
                     </a>
                 </div>
             </section>
-            
+
             <!-- "Puzzle Mania" Section -->
             <section>
                 <h2 class="text-2xl font-bold text-white mb-4">Puzzle Mania</h2>
                 <div class="flex gap-4 overflow-x-auto no-scrollbar pb-4 snap-x snap-mandatory">
-                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/0E7490/FFFFFF?text=Water+Flow" alt="Water Flow" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/0E7490/FFFFFF?text=Water+Flow" alt="Water Flow"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Water Flow</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Water Flow
+                        </h3> <!-- Added class -->
                     </a>
-                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/92400E/FFFFFF?text=Wood+Blocks" alt="Wood Blocks" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/92400E/FFFFFF?text=Wood+Blocks" alt="Wood Blocks"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Wood Blocks</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Wood Blocks
+                        </h3> <!-- Added class -->
                     </a>
-                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/3B82F6/FFFFFF?text=Sudoku" alt="Sudoku" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/3B82F6/FFFFFF?text=Sudoku" alt="Sudoku"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Daily Sudoku</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Daily Sudoku
+                        </h3> <!-- Added class -->
                     </a>
-                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/8B5CF6/FFFFFF?text=Hexa+Puzzle" alt="Hexa Puzzle" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/8B5CF6/FFFFFF?text=Hexa+Puzzle" alt="Hexa Puzzle"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Hexa Puzzle</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Hexa Puzzle
+                        </h3> <!-- Added class -->
                     </a>
-                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group hidden sm:block"> <!-- Added class -->
-                        <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
-                            <img src="https://placehold.co/300x300/EC4899/FFFFFF?text=Candy+Crush" alt="Candy Crush" class="w-full h-40 sm:h-48 object-cover aspect-square">
+                    <a href="#" class="game-card block w-40 sm:w-48 flex-shrink-0 snap-start group hidden sm:block">
+                        <!-- Added class -->
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-orange-500/20">
+                            <img src="https://placehold.co/300x300/EC4899/FFFFFF?text=Candy+Crush" alt="Candy Crush"
+                                class="w-full h-40 sm:h-48 object-cover aspect-square">
                         </div>
-                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Candy Mania</h3> <!-- Added class -->
+                        <h3 class="game-title mt-3 text-sm sm:text-base font-medium text-gray-200 truncate">Candy Mania
+                        </h3> <!-- Added class -->
                     </a>
                 </div>
             </section>
@@ -368,7 +450,7 @@
         // --- Mobile Menu Toggle ---
         const menuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        
+
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
@@ -411,7 +493,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const slides = document.querySelectorAll('#carousel-container .carousel-slide');
             const dotsContainer = document.getElementById('carousel-dots');
-            
+
             if (slides.length === 0) return;
 
             let currentSlide = 0;
@@ -438,12 +520,12 @@
                     dots[i].classList.remove('bg-white', 'w-4');
                     dots[i].classList.add('bg-white/40', 'w-2.5');
                 });
-                
+
                 // Show the correct slide
                 currentSlide = (index + slides.length) % slides.length;
                 slides[currentSlide].classList.remove('opacity-0', 'absolute');
                 slides[currentSlide].classList.add('opacity-100', 'relative');
-                
+
                 // Highlight the correct dot
                 dots[currentSlide].classList.add('bg-white', 'w-4');
                 dots[currentSlide].classList.remove('bg-white/40', 'w-2.5');
@@ -470,12 +552,12 @@
             const mobileSearchButton = document.getElementById('mobile-search-button');
             const mobileSearchOverlay = document.getElementById('mobile-search-overlay');
             const mobileSearchClose = document.getElementById('mobile-search-close');
-            
+
             const gameSectionsContainer = document.getElementById('game-sections-container');
             const searchResultsSection = document.getElementById('search-results-section');
             const searchResultsGrid = document.getElementById('search-results-grid');
             const noResultsMessage = document.getElementById('no-results-message');
-            
+
             // Collect all game cards. We store their info for efficient searching.
             const allGameCards = [];
             document.querySelectorAll('.game-card').forEach(card => {
@@ -490,10 +572,10 @@
 
             const performSearch = (query) => {
                 const searchQuery = query.toLowerCase().trim();
-                
+
                 // Clear previous results
                 searchResultsGrid.innerHTML = '';
-                
+
                 if (searchQuery === '') {
                     // If search is empty, show all game sections and hide search results
                     gameSectionsContainer.classList.remove('hidden');
@@ -506,7 +588,7 @@
                 searchResultsSection.classList.remove('hidden');
 
                 let matchesFound = 0;
-                
+
                 allGameCards.forEach(game => {
                     if (game.title.includes(searchQuery)) {
                         // Use the pre-cloned element
@@ -543,9 +625,9 @@
                 mobileSearchInput.value = ''; // Clear search on close
                 performSearch(''); // Reset view
             });
-            
+
             // Also close overlay if clicking outside the input (on the backdrop)
-             mobileSearchOverlay.addEventListener('click', (e) => {
+            mobileSearchOverlay.addEventListener('click', (e) => {
                 if (e.target === mobileSearchOverlay) {
                     mobileSearchOverlay.classList.add('hidden');
                     mobileSearchInput.value = ''; // Clear search on close
@@ -555,8 +637,5 @@
         });
     </script>
 </body>
+
 </html>
-
-
-
-
