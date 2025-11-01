@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>Flying Game - Mobile</title>
+    <title>Flying Modi JI Game - Mobile</title>
     <style>
         * {
             margin: 0;
@@ -29,7 +30,7 @@
             transform: translate(-50%, -50%);
             background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 70%, #90EE90 100%);
             border: 3px solid #333;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             max-width: 100vw;
             max-height: 100vh;
         }
@@ -42,12 +43,13 @@
             font-size: 48px;
             font-weight: bold;
             color: white;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
             z-index: 10;
             pointer-events: none;
         }
 
-        #startScreen, #gameOverScreen {
+        #startScreen,
+        #gameOverScreen {
             position: absolute;
             top: 0;
             left: 0;
@@ -63,13 +65,15 @@
             text-align: center;
         }
 
-        #startScreen h1, #gameOverScreen h1 {
+        #startScreen h1,
+        #gameOverScreen h1 {
             font-size: 48px;
             margin-bottom: 20px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
         }
 
-        #startScreen p, #gameOverScreen p {
+        #startScreen p,
+        #gameOverScreen p {
             font-size: 24px;
             margin: 10px;
         }
@@ -84,7 +88,7 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             transition: transform 0.1s;
         }
 
@@ -117,16 +121,17 @@
         }
     </style>
 </head>
+
 <body>
     <canvas id="gameCanvas"></canvas>
     <div id="scoreBoard">0</div>
     <button id="muteButton" onclick="toggleMute()">🔊</button>
-    
+
     <div id="startScreen">
         <h1>🚁 Flying Game</h1>
         <p>Tap anywhere to fly!</p>
         <p>Avoid the obstacles</p>
-        <button class="btn" onclick="startGame()">START GAME</button>
+        <button id="startButton" class="btn" onclick="startGame()" disabled>LOADING...</button>
     </div>
 
     <div id="gameOverScreen">
@@ -144,6 +149,25 @@
         const finalScore = document.getElementById('finalScore');
         const muteButton = document.getElementById('muteButton');
 
+        // --- START: New Code to Load Image ---
+        const startButton = document.getElementById('startButton');
+
+        const playerImage = new Image();
+        playerImage.src = 'modi-ji-mask.png'; // <-- Make sure your image name matches!
+
+        playerImage.onload = function () {
+            // This runs when the image has successfully loaded
+            startButton.disabled = false;
+            startButton.textContent = 'START GAME';
+        };
+
+        playerImage.onerror = function () {
+            // This runs if the image fails to load
+            console.error("Could not load player.png. Check file name/location.");
+            startButton.textContent = 'IMAGE ERROR';
+        };
+        // --- END: New Code to Load Image ---
+
         // Audio Context for sound effects
         let audioContext;
         let isMuted = false;
@@ -160,7 +184,7 @@
         // Create background music using Web Audio API
         function playBackgroundMusic() {
             if (!audioContext || isMuted) return;
-            
+
             // Stop existing music if playing
             if (backgroundMusicSource) {
                 backgroundMusicSource.stop();
@@ -173,7 +197,7 @@
             // Create a simple melody
             oscillator1.type = 'sine';
             oscillator2.type = 'sine';
-            
+
             oscillator1.frequency.setValueAtTime(262, audioContext.currentTime); // C4
             oscillator2.frequency.setValueAtTime(330, audioContext.currentTime); // E4
 
@@ -274,7 +298,7 @@
         function toggleMute() {
             isMuted = !isMuted;
             muteButton.textContent = isMuted ? '🔇' : '🔊';
-            
+
             if (isMuted && backgroundMusicSource) {
                 backgroundMusicSource.stop();
             } else if (!isMuted && gameRunning) {
@@ -287,13 +311,13 @@
             const aspectRatio = 9 / 16;
             let width = window.innerWidth;
             let height = window.innerHeight;
-            
+
             if (width / height > aspectRatio) {
                 width = height * aspectRatio;
             } else {
                 height = width / aspectRatio;
             }
-            
+
             canvas.width = Math.min(width, 400);
             canvas.height = Math.min(height, 700);
         }
@@ -305,7 +329,7 @@
         let gameRunning = false;
         let score = 0;
         let frame = 0;
-        
+
         // Player object
         const player = {
             x: 80,
@@ -326,7 +350,7 @@
 
         // Cloud array for background
         let clouds = [];
-        
+
         // Initialize clouds
         function initClouds() {
             clouds = [];
@@ -344,34 +368,14 @@
         // Draw player (character)
         function drawPlayer() {
             ctx.save();
+            // Translate and rotate the context just like before
             ctx.translate(player.x + player.width / 2, player.y + player.height / 2);
             ctx.rotate(player.rotation);
-            
-            // Body
-            ctx.fillStyle = '#FF9800';
-            ctx.fillRect(-player.width/2, -player.height/2, player.width, player.height);
-            
-            // Face
-            ctx.fillStyle = '#FFE0B2';
-            ctx.fillRect(-player.width/2 + 10, -player.height/2 + 10, 30, 30);
-            
-            // Eyes
-            ctx.fillStyle = '#000';
-            ctx.fillRect(-player.width/2 + 15, -player.height/2 + 15, 5, 5);
-            ctx.fillRect(-player.width/2 + 25, -player.height/2 + 15, 5, 5);
-            
-            // Smile
-            ctx.beginPath();
-            ctx.arc(0, -5, 8, 0, Math.PI);
-            ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            // Propeller (animated)
-            ctx.fillStyle = '#2196F3';
-            const propellerOffset = Math.sin(frame * 0.5) * 3;
-            ctx.fillRect(-player.width/2 - 5, -player.height/2 - 15 + propellerOffset, 50, 8);
-            
+
+            // Draw the loaded image instead of the rectangles
+            // We draw it at (-width/2, -height/2) so it's centered on the rotation point
+            ctx.drawImage(playerImage, -player.width / 2, -player.height / 2, player.width, player.height);
+
             ctx.restore();
         }
 
@@ -380,9 +384,9 @@
             ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
             clouds.forEach(cloud => {
                 ctx.beginPath();
-                ctx.arc(cloud.x, cloud.y, cloud.width/3, 0, Math.PI * 2);
-                ctx.arc(cloud.x + cloud.width/3, cloud.y - cloud.height/3, cloud.width/4, 0, Math.PI * 2);
-                ctx.arc(cloud.x + cloud.width/2, cloud.y, cloud.width/3.5, 0, Math.PI * 2);
+                ctx.arc(cloud.x, cloud.y, cloud.width / 3, 0, Math.PI * 2);
+                ctx.arc(cloud.x + cloud.width / 3, cloud.y - cloud.height / 3, cloud.width / 4, 0, Math.PI * 2);
+                ctx.arc(cloud.x + cloud.width / 2, cloud.y, cloud.width / 3.5, 0, Math.PI * 2);
                 ctx.fill();
             });
         }
@@ -403,7 +407,7 @@
             const minHeight = 50;
             const maxHeight = canvas.height - gap - minHeight;
             const height = minHeight + Math.random() * (maxHeight - minHeight);
-            
+
             obstacles.push({
                 x: canvas.width,
                 topHeight: height,
@@ -417,17 +421,17 @@
             ctx.fillStyle = '#4CAF50';
             ctx.strokeStyle = '#2E7D32';
             ctx.lineWidth = 3;
-            
+
             obstacles.forEach(obstacle => {
                 // Top obstacle
                 ctx.fillRect(obstacle.x, 0, obstacleWidth, obstacle.topHeight);
                 ctx.strokeRect(obstacle.x, 0, obstacleWidth, obstacle.topHeight);
-                
+
                 // Bottom obstacle
                 const bottomHeight = canvas.height - obstacle.bottomY;
                 ctx.fillRect(obstacle.x, obstacle.bottomY, obstacleWidth, bottomHeight);
                 ctx.strokeRect(obstacle.x, obstacle.bottomY, obstacleWidth, bottomHeight);
-                
+
                 // Decorative caps
                 ctx.fillStyle = '#66BB6A';
                 ctx.fillRect(obstacle.x - 5, obstacle.topHeight - 20, obstacleWidth + 10, 20);
@@ -440,12 +444,12 @@
         function updateObstacles() {
             obstacles.forEach((obstacle, index) => {
                 obstacle.x -= obstacleSpeed;
-                
+
                 // Remove off-screen obstacles
                 if (obstacle.x + obstacleWidth < 0) {
                     obstacles.splice(index, 1);
                 }
-                
+
                 // Score point
                 if (!obstacle.scored && obstacle.x + obstacleWidth < player.x) {
                     obstacle.scored = true;
@@ -453,7 +457,7 @@
                     scoreBoard.textContent = score;
                     playScoreSound();
                 }
-                
+
                 // Check collision
                 if (
                     player.x + player.width > obstacle.x &&
@@ -469,10 +473,10 @@
         function updatePlayer() {
             player.velocity += player.gravity;
             player.y += player.velocity;
-            
+
             // Rotation based on velocity
             player.rotation = Math.min(Math.max(player.velocity * 0.05, -0.5), 0.5);
-            
+
             // Check boundaries
             if (player.y + player.height > canvas.height || player.y < 0) {
                 endGame();
@@ -484,7 +488,7 @@
             const groundHeight = 30;
             ctx.fillStyle = '#8B4513';
             ctx.fillRect(0, canvas.height - groundHeight, canvas.width, groundHeight);
-            
+
             // Grass pattern
             ctx.fillStyle = '#228B22';
             for (let i = 0; i < canvas.width; i += 20) {
@@ -495,30 +499,30 @@
         // Game loop
         function gameLoop() {
             if (!gameRunning) return;
-            
+
             frame++;
-            
+
             // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             // Draw background elements
             drawClouds();
             updateClouds();
-            
+
             // Update game objects
             updatePlayer();
             updateObstacles();
-            
+
             // Draw game objects
             drawObstacles();
             drawPlayer();
             drawGround();
-            
+
             // Create new obstacles
             if (frame % 100 === 0) {
                 createObstacle();
             }
-            
+
             requestAnimationFrame(gameLoop);
         }
 
@@ -544,18 +548,18 @@
             frame = 0;
             obstacles = [];
             scoreBoard.textContent = '0';
-            
+
             // Reset player
             player.y = canvas.height / 2;
             player.velocity = 0;
             player.rotation = 0;
-            
+
             // Initialize clouds
             initClouds();
-            
+
             // Start background music
             playBackgroundMusic();
-            
+
             gameLoop();
         }
 
@@ -565,7 +569,7 @@
             gameOverScreen.style.display = 'flex';
             finalScore.textContent = `Score: ${score}`;
             playGameOverSound();
-            
+
             if (backgroundMusicSource) {
                 backgroundMusicSource.stop();
             }
@@ -580,4 +584,5 @@
         initClouds();
     </script>
 </body>
+
 </html>
