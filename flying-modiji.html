@@ -123,6 +123,7 @@
 </head>
 
 <body>
+    <audio id="bgMusic" src="modi-ji-music-audio.mp3" loop></audio>
     <canvas id="gameCanvas"></canvas>
     <div id="scoreBoard">0</div>
     <button id="muteButton" onclick="toggleMute()">🔊</button>
@@ -148,6 +149,7 @@
         const gameOverScreen = document.getElementById('gameOverScreen');
         const finalScore = document.getElementById('finalScore');
         const muteButton = document.getElementById('muteButton');
+        const bgMusic = document.getElementById('bgMusic');
 
         // --- START: New Code to Load Image ---
         const startButton = document.getElementById('startButton');
@@ -181,55 +183,14 @@
             }
         }
 
-        // Create background music using Web Audio API
+        // Play background music
         function playBackgroundMusic() {
-            if (!audioContext || isMuted) return;
-
-            // Stop existing music if playing
-            if (backgroundMusicSource) {
-                backgroundMusicSource.stop();
+            if (!isMuted && bgMusic) {
+                // The .play() might fail if user hasn't clicked yet
+                // But since this is called from startGame (a click), it's safe.
+                bgMusic.currentTime = 0; // Rewind to start
+                bgMusic.play().catch(e => console.error("Audio play failed", e));
             }
-
-            const oscillator1 = audioContext.createOscillator();
-            const oscillator2 = audioContext.createOscillator();
-            backgroundMusicGain = audioContext.createGain();
-
-            // Create a simple melody
-            oscillator1.type = 'sine';
-            oscillator2.type = 'sine';
-
-            oscillator1.frequency.setValueAtTime(262, audioContext.currentTime); // C4
-            oscillator2.frequency.setValueAtTime(330, audioContext.currentTime); // E4
-
-            backgroundMusicGain.gain.setValueAtTime(0.05, audioContext.currentTime);
-
-            oscillator1.connect(backgroundMusicGain);
-            oscillator2.connect(backgroundMusicGain);
-            backgroundMusicGain.connect(audioContext.destination);
-
-            oscillator1.start();
-            oscillator2.start();
-
-            // Create a simple repeating melody pattern
-            const melody = [262, 294, 330, 349, 392, 349, 330, 294];
-            let noteIndex = 0;
-            const noteInterval = setInterval(() => {
-                if (!gameRunning) {
-                    clearInterval(noteInterval);
-                    return;
-                }
-                oscillator1.frequency.setValueAtTime(melody[noteIndex], audioContext.currentTime);
-                oscillator2.frequency.setValueAtTime(melody[noteIndex] * 1.25, audioContext.currentTime);
-                noteIndex = (noteIndex + 1) % melody.length;
-            }, 400);
-
-            backgroundMusicSource = {
-                stop: () => {
-                    clearInterval(noteInterval);
-                    oscillator1.stop();
-                    oscillator2.stop();
-                }
-            };
         }
 
         // Jump sound effect
@@ -297,13 +258,15 @@
         // Toggle mute
         function toggleMute() {
             isMuted = !isMuted;
-            muteButton.textContent = isMuted ? '🔇' : '🔊';
-
-            if (isMuted && backgroundMusicSource) {
-                backgroundMusicSource.stop();
-            } else if (!isMuted && gameRunning) {
-                playBackgroundMusic();
+            muteButton.textContent = isMuted ? '這' : '矧';
+            
+            if (isMuted) {
+                bgMusic.pause();
+            } else if (gameRunning) { // Only resume music if game is running
+                bgMusic.play();
             }
+            // The sound effects (jump, score) will still
+            // obey the 'isMuted' variable automatically.
         }
 
         // Set canvas size for mobile
@@ -570,8 +533,8 @@
             finalScore.textContent = `Score: ${score}`;
             playGameOverSound();
 
-            if (backgroundMusicSource) {
-                backgroundMusicSource.stop();
+            if (bgMusic) {
+                bgMusic.pause();
             }
         }
 
